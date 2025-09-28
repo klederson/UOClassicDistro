@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block content %}
+<section>
+  <h2>Status do Servidor</h2>
+  <table>
+    <tr><th>Nome</th><td>{{ status.name }}</td></tr>
+    <tr><th>Imagem</th><td>{{ status.image }}</td></tr>
+    <tr><th>ID</th><td>{{ status.id or '-' }}</td></tr>
+    <tr><th>Status</th><td>{{ status.status }}</td></tr>
+  </table>
+  <div style="margin-top:12px">
+    <form action="/start" method="post" style="display:inline">
+      <button type="submit">Iniciar</button>
+    </form>
+    <form action="/stop" method="post" style="display:inline">
+      <button type="submit">Parar</button>
+    </form>
+    <a href="/logs" style="margin-left:8px">Ver Logs</a>
+  </div>
+</section>
+{% endblock %}
+

@@ -1,0 +1,26 @@
+version: "3.9"
+services:
+  controller:
+    build: .
+    image: server-controller:latest
+    container_name: server-controller
+    environment:
+      - SECRET_KEY=${SECRET_KEY:-dev-secret}
+      - DATABASE_URL=sqlite:////data/app.db
+      - ADMIN_EMAIL=${ADMIN_EMAIL:-admin@example.com}
+      - ADMIN_PASSWORD=${ADMIN_PASSWORD:-changeme}
+      - MANAGED_IMAGE=${MANAGED_IMAGE:-nginx:alpine}
+      - MANAGED_NAME=${MANAGED_NAME:-managed-server}
+      - MANAGED_PORTS=${MANAGED_PORTS:-8080:80}
+      - MANAGED_ENV=${MANAGED_ENV:-}
+      - MANAGED_VOLUMES=${MANAGED_VOLUMES:-}
+    ports:
+      - "8000:8000"
+    volumes:
+      - controller-data:/data
+      - /var/run/docker.sock:/var/run/docker.sock
+    restart: unless-stopped
+
+volumes:
+  controller-data:
+
