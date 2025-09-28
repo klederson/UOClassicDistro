@@ -1,0 +1,85 @@
+version: '3.8'
+
+services:
+  pol-server:
+    build: .
+    container_name: pol-server
+    restart: unless-stopped
+    ports:
+      - "5003:5003"  # POL Server port
+    volumes:
+      - ./data:/workspace/data
+      - ./accounts:/workspace/accounts
+      - ./logs:/workspace/logs
+      - ./config:/workspace/config
+      - ./pkg:/workspace/pkg
+      - ./scripts:/workspace/scripts
+      - ./regions:/workspace/regions
+      - ./realm:/workspace/realm
+      - ./MUL:/workspace/MUL
+    environment:
+      - POL_SERVER_NAME=MyPOLServer
+      - POL_ADMIN_PASSWORD=admin123
+    networks:
+      - pol-network
+    depends_on:
+      - pol-api
+
+  pol-api:
+    build:
+      context: .
+      dockerfile: Dockerfile.api
+    container_name: pol-api
+    restart: unless-stopped
+    ports:
+      - "8001:8000"
+    volumes:
+      - ./data:/workspace/data
+      - ./accounts:/workspace/accounts
+      - ./logs:/workspace/logs
+      - ./config:/workspace/config
+      - ./api:/app
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      - API_SECRET_KEY=your-secret-key-here
+      - POL_CONTAINER_NAME=pol-server
+    networks:
+      - pol-network
+
+  pol-web:
+    build:
+      context: .
+      dockerfile: Dockerfile.web
+    container_name: pol-web
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    depends_on:
+      - pol-api
+    networks:
+      - pol-network
+
+  nginx:
+    image: nginx:alpine
+    container_name: pol-nginx
+    restart: unless-stopped
+    ports:
+      - "443:443"
+      - "8080:80"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ./nginx/ssl:/etc/nginx/ssl
+    depends_on:
+      - pol-web
+      - pol-api
+    networks:
+      - pol-network
+
+networks:
+  pol-network:
+    driver: bridge
+
+volumes:
+  pol-data:
+  pol-accounts:
+  pol-logs:
