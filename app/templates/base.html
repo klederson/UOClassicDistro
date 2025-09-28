@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{{ title or 'Server Controller' }}</title>
+    <link rel="stylesheet" href="/static/styles.css" />
+</head>
+<body>
+    <header>
+        <h1>{{ title or 'Server Controller' }}</h1>
+        <nav>
+            <a href="/">Dashboard</a>
+            <a href="/users">Usuários</a>
+            <form action="/logout" method="post" style="display:inline">
+                <button type="submit">Sair</button>
+            </form>
+        </nav>
+    </header>
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+</body>
+</html>
+

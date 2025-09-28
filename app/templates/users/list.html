@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block content %}
+<section>
+  <div style="display:flex;align-items:center;justify-content:space-between">
+    <h2>Usuários</h2>
+    <a href="/users/new">Novo Usuário</a>
+  </div>
+  <table>
+    <thead>
+      <tr>
+        <th>ID</th><th>Email</th><th>Admin</th><th>Ações</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for u in users %}
+      <tr>
+        <td>{{ u.id }}</td>
+        <td>{{ u.email }}</td>
+        <td>{{ 'Sim' if u.is_admin else 'Não' }}</td>
+        <td>
+          <form action="/users/{{ u.id }}/delete" method="post" onsubmit="return confirm('Excluir?')">
+            <button type="submit">Excluir</button>
+          </form>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</section>
+{% endblock %}
+

@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block content %}
+<section>
+  <h2>Novo Usuário</h2>
+  {% if error %}
+    <div class="error">{{ error }}</div>
+  {% endif %}
+  <form action="/users/new" method="post">
+    <label>Email</label>
+    <input type="email" name="email" required />
+    <label>Senha</label>
+    <input type="password" name="password" minlength="6" required />
+    <label style="display:block;margin:8px 0">
+      <input type="checkbox" name="is_admin" value="true" /> Admin
+    </label>
+    <button type="submit">Criar</button>
+  </form>
+</section>
+{% endblock %}
+
